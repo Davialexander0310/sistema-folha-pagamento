@@ -5,6 +5,7 @@ import model.ContaPagar;
 import java.util.List;
 import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
+import model.enums.StatusConta;
 
 public class FinanceiroView extends javax.swing.JPanel {
 
@@ -122,15 +123,20 @@ public class FinanceiroView extends javax.swing.JPanel {
         try{
             int linha = jTable.getSelectedRow();
             
-            if(linha == -1){
+            if (linha == -1){
                 javax.swing.JOptionPane.showMessageDialog(this, "Selecione uma conta primeiro", "Aviso", javax.swing.JOptionPane.WARNING_MESSAGE);
             }
             else{
-              ContaPagar conta = contasPagar.get(linha);
-              financeiroController.atualizarStatus(conta.getIdConta(), model.enums.StatusConta.PAGO);
-              refresh();
+                int resposta = javax.swing.JOptionPane.showConfirmDialog(this, "Tem certeza que deseja marcar essa conta como pago?", "Confirmação", javax.swing.JOptionPane.YES_NO_OPTION);
+                
+                if(resposta == javax.swing.JOptionPane.YES_OPTION){
+                   ContaPagar conta = contasPagar.get(linha);
+                   financeiroController.atualizarStatus(conta.getIdConta(), model.enums.StatusConta.PAGO);
+                   refresh();
+                }
             }
         }
+        
         catch(Exception e){
             javax.swing.JOptionPane.showMessageDialog(this, "Não foi possível marcar como pago", "Erro", javax.swing.JOptionPane.WARNING_MESSAGE);
         }
