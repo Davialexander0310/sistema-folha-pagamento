@@ -10,57 +10,55 @@ import javax.swing.table.DefaultTableModel;
 public class FolhaView extends javax.swing.JPanel {
 
     private FolhaController folhaController = new FolhaController();
-    
+
     public FolhaView() {
         initComponents();
         refresh();
-        
+
         javax.swing.table.TableRowSorter<javax.swing.table.DefaultTableModel> sorter = new javax.swing.table.TableRowSorter<>((DefaultTableModel) jTable.getModel());
         jTable.setRowSorter(sorter);
-        
+
         txtBusca.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt){
+            public void keyReleased(java.awt.event.KeyEvent evt) {
                 String texto = txtBusca.getText();
                 sorter.setRowFilter(javax.swing.RowFilter.regexFilter("(?i)" + texto));
             }
         });
-        
+
     }
-    
-    public void refresh(){
-        
+
+    public void refresh() {
+
         cbFuncionario.removeAllItems();
-        
-        try{
-        FuncionarioDAO dao = new FuncionarioDAO();
-        List<Funcionario> funcionarios = dao.listarTodos();
-        
-        for (Funcionario f : funcionarios){
-            cbFuncionario.addItem(f);
-        }
-        
-        }
-        catch(Exception e){
+
+        try {
+            FuncionarioDAO dao = new FuncionarioDAO();
+            List<Funcionario> funcionarios = dao.listarTodos();
+
+            for (Funcionario f : funcionarios) {
+                cbFuncionario.addItem(f);
+            }
+
+        } catch (Exception e) {
             System.out.println("Não foi possível carregar funcionários agora: " + e.getMessage());
         }
-        
-        try{
+
+        try {
             DefaultTableModel model = (DefaultTableModel) jTable.getModel();
-            
+
             model.setRowCount(0);
-            
+
             List<Folha> folhas = folhaController.listarTodos();
-            
-            for(Folha folha : folhas){
-            model.addRow(new Object[]{
-                folha.getFuncionario().getNomeFuncionario(), folha.getSalarioBase(), folha.getProventos(), folha.getDescontos(), folha.getSalarioLiquido()
-            });
-        }
-        }
-        catch(Exception e){
+
+            for (Folha folha : folhas) {
+                model.addRow(new Object[]{
+                    folha.getFuncionario().getNomeFuncionario(), folha.getSalarioBase(), folha.getProventos(), folha.getDescontos(), folha.getSalarioLiquido()
+                });
+            }
+        } catch (Exception e) {
             System.out.println("Não foi possível carregar folhas: " + e.getMessage());
         }
-        
+
     }
 
     /**
@@ -178,27 +176,27 @@ public class FolhaView extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnGerarFolhaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGerarFolhaActionPerformed
-        Funcionario funcionario = (Funcionario) cbFuncionario.getSelectedItem();
-        double proventos = Double.parseDouble(txtProventos.getText());
-        int mesNumero = cbMes.getSelectedIndex() + 1;
-        String mes = String.valueOf(mesNumero);
-        String ano = (String) cbAno.getSelectedItem();
-        String mesReferencia = mes + "/" + ano;
-        
-        Folha folha = folhaController.gerarFolha(funcionario, proventos, mesReferencia);
-        
-        DefaultTableModel model = (DefaultTableModel) jTable.getModel();
-        model.addRow(new Object[]{
-            folha.getFuncionario().getNomeFuncionario(),
-            folha.getSalarioBase(),
-            folha.getProventos(),
-            folha.getDescontos(),
-            folha.getSalarioLiquido()
-        });
-        
-        javax.swing.JOptionPane.showMessageDialog(this, "Folha gerada com sucesso! Salário líquido: " + folha.getSalarioLiquido());
-    }//GEN-LAST:event_btnGerarFolhaActionPerformed
+        try {
+            Funcionario funcionario = (Funcionario) cbFuncionario.getSelectedItem();
+            double proventos = Double.parseDouble(txtProventos.getText());
+            int mesNumero = cbMes.getSelectedIndex() + 1;
+            String mes = String.valueOf(mesNumero);
+            String ano = (String) cbAno.getSelectedItem();
+            String mesReferencia = mes + "/" + ano;
 
+            Folha folha = folhaController.gerarFolha(funcionario, proventos, mesReferencia);
+
+            DefaultTableModel model = (DefaultTableModel) jTable.getModel();
+            model.addRow(new Object[]{
+                folha.getFuncionario().getNomeFuncionario(), folha.getSalarioBase(), folha.getProventos(), folha.getDescontos(), folha.getSalarioLiquido()
+            });
+
+            javax.swing.JOptionPane.showMessageDialog(this, "Folha gerada com sucesso! Salário líquido: " + folha.getSalarioLiquido());
+    }//GEN-LAST:event_btnGerarFolhaActionPerformed
+    catch (NumberFormatException e) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Digite um número válido no salário", "Erro", javax.swing.JOptionPane.WARNING_MESSAGE);
+        }
+    }
     private void txtBuscaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBuscaActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtBuscaActionPerformed
