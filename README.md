@@ -7,10 +7,10 @@ Sistema desktop em Java para gestão de funcionários e folha de pagamento. Ele 
 ### Cadastro de funcionários
 ![Cadastro de funcionários](prints/cadastro.png)
 
-### Folha de pagamento
+### Módulo financeiro
 ![Folha de pagamento](prints/folha.png)
 
-### Módulo financeiro
+### Folha de pagamento
 ![Módulo financeiro](prints/financeiro.png)
 
 ## Funcionalidades
